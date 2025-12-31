@@ -1,0 +1,114 @@
+:root {
+  --primary-color: #009019;
+  --primary-hover: #007615;
+  --secondary-color: #abd7fe;
+  --accent-color: #f2f342;
+  
+  --success-color: #009019;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+
+  --bg-color: #ffffff;
+  --card-bg: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+  --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --glass-backdrop: blur(8px);
+
+  --font-family: "Inter", system-ui, -apple-system, sans-serif;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  min-height: 100vh;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+}
+
+.glass-header {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Button Overrides for Premium Feel */
+.btn {
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+}
+
+/* Table Enhancements */
+.table-responsive {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.table {
+  margin-bottom: 0;
+  background: transparent;
+}
+.table thead th {
+  background: rgba(249, 250, 251, 0.8);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  border-bottom: none;
+}
+.table td {
+  vertical-align: middle;
+}
+.table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  background: rgba(17, 24, 39, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.8);
+}

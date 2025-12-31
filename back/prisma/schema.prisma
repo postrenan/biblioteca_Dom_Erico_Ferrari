@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String         @id @default(uuid())
+  email       String?        @unique
+  name        String
+  password    String
+  role        String         @default("STUDENT")
+  matricula   String         @unique
+  isActive    Boolean        @default(true)
+  serieId     String?
+  readingGoal Int            @default(0)
+  createdAt   DateTime       @default(now())
+  contact1    String?
+  contact2    String?
+  observation String?
+  fines       Fine[]
+  loans       Loan[]
+  renewals    LoanRenewal[]
+  suggestions Suggestion[]
+  serie       Series?        @relation(fields: [serieId], references: [id])
+  wishlistItems WishlistItem[]
+  waitingListItems WaitingList[]
+}
+
+model Series {
+  id               String            @id @default(uuid())
+  name             String            @unique
+  users            User[]
+  requiredReadings RequiredReading[]
+}
+
+model Book {
+  id              String         @id @default(uuid())
+  title           String
+  author          String
+  description     String
+  coverUrl        String?
+  isbn            String?
+  publicationDate String?
+  genre           String?
+  createdAt       DateTime       @default(now())
+  availableCopies Int            @default(0)
+  totalCopies     Int            @default(0)
+  labelType       String         @default("AUTO")
+  pages           Int            @default(0)
+  copies          BookCopy[]
+  wishlistItems   WishlistItem[]
+  waitingListItems WaitingList[]
+  requiredReadings RequiredReading[]
+  categories      Category[]     @relation("BookToCategory")
+}
+
+model Category {
+  id    String @id @default(uuid())
+  name  String @unique
+  books Book[] @relation("BookToCategory")
+}
+
+model BookCopy {
+  id            String  @id @default(uuid())
+  bookId        String
+  copyCode      String  @unique
+  status        String  @default("AVAILABLE")
+  customLabel   String?
+  removalReason String?
+  book          Book    @relation(fields: [bookId], references: [id])
+  loans         Loan[]
+}
+
+model Loan {
+  id         String        @id @default(uuid())
+  bookCopyId String
+  userId     String
+  loanDate   DateTime      @default(now())
+  dueDate    DateTime
+  returnDate DateTime?
+  status     String        @default("ACTIVE")
+  renewCount Int           @default(0)
+  pagesRead  Int           @default(0)
+  rating     Int?
+  review     String?
+  fine       Fine?
+  bookCopy   BookCopy      @relation(fields: [bookCopyId], references: [id])
+  user       User          @relation(fields: [userId], references: [id])
+  renewals   LoanRenewal[]
+}
+
+model Fine {
+  id        String    @id @default(uuid())
+  userId    String
+  loanId    String?   @unique
+  value     Float
+  reason    String
+  status    String    @default("PENDING")
+  createdAt DateTime  @default(now())
+  paidAt    DateTime?
+  loan      Loan?     @relation(fields: [loanId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model LoanRenewal {
+  id        String   @id @default(uuid())
+  loanId    String
+  userId    String
+  renewedAt DateTime @default(now())
+  loan      Loan     @relation(fields: [loanId], references: [id])
+  renewedBy User     @relation(fields: [userId], references: [id])
+}
+
+model SystemSetting {
+  key   String @id
+  value String
+}
+
+model Suggestion {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  author    String?
+  reason    String?
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model WishlistItem {
+  id        String   @id @default(uuid())
+  userId    String
+  bookId    String
+  createdAt DateTime @default(now())
+  book      Book     @relation(fields: [bookId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, bookId])
+}
+model RequiredReading {
+  id        String   @id @default(uuid())
+  serieId   String
+  bookId    String
+  createdAt DateTime @default(now())
+  serie     Series   @relation(fields: [serieId], references: [id])
+  book      Book     @relation(fields: [bookId], references: [id])
+
+  @@unique([serieId, bookId])
+}
+
+model WaitingList {
+  id        String   @id @default(uuid())
+  userId    String
+  bookId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  book      Book     @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
+}
